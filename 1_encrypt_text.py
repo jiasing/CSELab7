@@ -7,6 +7,7 @@ from cryptography.fernet import Fernet
 
 # Generate a Fernet key
 # TODO: Task 1-1
+symmetric_key = Fernet.generate_key()
 
 # Prepare output destination
 try:
@@ -22,6 +23,9 @@ def enc_text(input_filename, output_filename):
     """
     # Generate a cipher
     # TODO: Task 1-2
+    cipher = Fernet(symmetric_key)
+
+
 
     # Open the file, read as bytes
     with open(input_filename, "rb") as fp:
@@ -29,7 +33,7 @@ def enc_text(input_filename, output_filename):
 
     # Encrypt the raw bytes
     # TODO: Task 1-3
-    encrypted_bytes = None
+    encrypted_bytes = cipher.encrypt(raw_bytes)
 
     try:
         # Convert the ciphertext output to a printable string
@@ -53,6 +57,7 @@ def dec_text(input_filename, output_filename):
     """
     # Generate a cipher from key (same as above in enc_text)
     # TODO: Task 1-2
+    cipher = Fernet(symmetric_key)
 
     try:
         # Open the file containing the cyphertext, read as string
@@ -61,6 +66,7 @@ def dec_text(input_filename, output_filename):
 
         # Convert the printable string back to bytes
         encrypted_bytes = base64.b64decode(encrypted_text.encode("utf8"))
+
     except Exception as e:
         print(
             f"You didn't implement the encryption and save the encrypted file back correctly."
@@ -69,8 +75,7 @@ def dec_text(input_filename, output_filename):
 
     # Decrypt the cipher bytes
     # TODO: Task 1-4
-    decrypted_bytes = None
-
+    decrypted_bytes = cipher.decrypt(encrypted_bytes)
     try:
         # Convert the decrypted bytes to printable text
         decrypted_text = decrypted_bytes.decode("utf8")
